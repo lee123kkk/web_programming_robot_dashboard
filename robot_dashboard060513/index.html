@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NARCHON Dashboard</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="box sidebar">
+            <div class="logo"><span class="logo-icon">〰️</span> NARCHON</div>
+            <ul class="nav-menu">
+                <li>⭐ 즐겨찾기</li>
+                <li>📊 대시보드</li>
+                <li class="active">🖥️ 모니터링</li>
+                <li>🤖 로봇 운영</li>
+                <li>📋 시나리오</li>
+                <li>🛠️ 로봇 서비스</li>
+                <li>📝 로그</li>
+                <li>⚙️ 설정</li>
+            </ul>
+        </nav>
+
+        <main class="main-wrapper">
+            <header class="box header">
+                <div class="search-box"><span>🔍</span><input type="text" placeholder="검색"></div>
+                <div class="header-right">
+                    <span class="user-role">최고 관리자</span><span class="user-name">hyundai.kim</span>
+                    <span class="noti-icon">🔔<span class="badge">14</span></span>
+                    <span class="lang">KR ⌄</span><span class="time">59:48 연장</span>
+                    <button class="logout-btn">로그아웃</button>
+                </div>
+            </header>
+
+            <div class="content-grid">
+                <div class="box robot-info">
+                    <h2><span id="robot-id">SEONGSU_03</span></h2>
+                    <p>층수: <span id="info-floor">---</span></p>
+                    <p>좌표: X(<span id="pos-x">0</span>), Y(<span id="pos-y">0</span>)</p>
+                    <p>속도: <span id="info-speed">0.0</span> m/s</p>
+                </div>
+
+                <div class="box system-status">
+                    <p>배터리: <strong id="stat-battery">0%</strong> (<span id="stat-voltage">0v</span>)</p>
+                    <p>CPU: <span id="stat-cpu">0%</span></p>
+                    <p>Memory: <span id="stat-mem">0%</span></p>
+                    <p>상태: <strong id="stat-status">UNKNOWN</strong></p>
+                </div>
+
+                <div class="box floor-nav">
+                    <ul>
+                        <li>10F</li><li>9F</li><li>8F</li><li>7F</li><li>6F</li><li>5F</li>
+                        <li>4F</li><li>3F</li><li>2F</li><li class="active">1F</li>
+                        <li>B1F</li><li>B2F</li><li>B3F</li>
+                    </ul>
+                </div>
+
+                <div class="box map-area">
+                    <div class="map-header">
+                        <h3 id="map-title">Map View - 1F</h3>
+                        <div class="map-controls">
+                            <button>➕</button>
+                            <button>➖</button>
+                        </div>
+                    </div>
+                    <div class="map-content" id="map-container">
+                        <canvas id="floorMap"></canvas>
+                    </div>
+                </div>
+
+                <div class="box latency-graph">
+                    <h3>Latency</h3><div class="latency-value">10 ms</div>
+                    <div class="graph-placeholder">
+                        <canvas id="latencyGraph" width="200" height="60" style="width: 100%; height: 100%;"></canvas>
+                    </div>
+                </div>
+                <div class="box camera-view">
+                    <h3>Camera View</h3>
+                    <div class="camera-content" style="flex: 1; background: #000; border-radius: 4px; overflow: hidden; display: flex;">
+                        <img src="/api/camera/stream" alt="Live Camera" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+
+                <div class="box log-table">
+                    <h3>Scenario Monitoring Log</h3>
+                    <table>
+                        <thead><tr><th>시간</th><th>구분</th><th>내용</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="box robot-control">
+                    <div class="control-tabs"><span class="active">로봇 제어</span><span>수동 제어</span><span>관리자 제어</span></div>
+                    <div class="control-grid">
+                        <button id="btn-charge">⚡<br>충전소 이동</button>
+                        <button id="btn-tts">🔊<br>TTS 발화</button>
+                        <button id="btn-open">📦<br>적재함 열기</button>
+                        <button id="btn-start-pos">📍<br>위치 설정</button>
+                        <button id="btn-pause" class="btn-primary">⏸️<br>일시정지</button>
+                    </div>
+                    <div class="control-footer">
+                        <button disabled>⏻ 시나리오 종료</button><button id="btn-restart">🔄 서비스 재시작</button>
+                        <button id="btn-shutdown" class="btn-dark">⏻ 시스템 종료</button>
+                    </div>
+                </div>
+
+                <div class="box remote-control">
+                    <h3>Remote Control</h3>
+                    <div class="joystick">
+                        <button id="joy-up" class="dir-btn up">▲</button>
+                        <div class="mid-btns">
+                            <button id="joy-left" class="dir-btn left">◀</button>
+                            <button id="joy-stop" class="dir-btn stop">■</button>
+                            <button id="joy-right" class="dir-btn right">▶</button>
+                        </div>
+                        <button id="joy-down" class="dir-btn down">▼</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="static/log_handler.js"></script>
+    <script src="static/robot_control.js"></script>
+    <script src="static/joystick.js"></script>
+    <script src="static/map_engine.js"></script>
+    <script src="static/elevator_sim.js"></script>
+    <script src="static/dashboard.js"></script>
+</body>
+</html>
